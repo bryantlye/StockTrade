@@ -1,1 +1,1 @@
-# StockTrade
+CSE 305 Project: StockTrade
