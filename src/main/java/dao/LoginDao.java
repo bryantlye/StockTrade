@@ -2,6 +2,8 @@ package dao;
 
 import model.Login;
 
+import java.sql.*;
+
 public class LoginDao {
 	/*
 	 * This class handles all the database operations related to login functionality
@@ -17,12 +19,44 @@ public class LoginDao {
 		 * password, which is the password of the user, is given as method parameter
 		 * Query to verify the username and password and fetch the role of the user, must be implemented
 		 */
-		
 		/*Sample data begins*/
 		Login login = new Login();
 		login.setRole(role);
 		return login;
-		/*Sample data ends*/
+		/*
+		Connection myConnection = null;
+		try {
+			String mysJDBCDriver = "com.mysql.jdbc.Driver";
+			String url = "jdbc:mysql://localhost:3306/new_schema?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+			String userID = "root";
+			String password1 = "12345678";
+
+			Class.forName("com.mysql.jdbc.Driver");
+			myConnection = DriverManager.getConnection(url, userID, password1);
+			System.out.println("I am able to connect");
+			Statement st = myConnection.createStatement();
+
+
+			//TODO: add password verification once password is added to customer
+			ResultSet rs = st.executeQuery("select * from account where Id='" + username + "' and Password='"+password+"'");
+			while (rs.next()) {
+				Login login = new Login();
+				login.setRole(role);
+				try {
+					myConnection.close();
+				} catch (SQLException var13) {
+				}
+
+				return login;
+			}
+
+
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("Login not successfull");
+		return null;
+		*/
 		
 	}
 	
@@ -35,9 +69,33 @@ public class LoginDao {
 		 * Return "success" on successful insertion of a new user
 		 * Return "failure" for an unsuccessful database operation
 		 */
-		
+
+		Connection myConnection = null;
+		try {
+			String mysJDBCDriver = "com.mysql.jdbc.Driver";
+			String url = "jdbc:mysql://localhost:3306/new_schema?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+			String userID = "root";
+			String password1 = "12345678";
+			Class.forName("com.mysql.jdbc.Driver");
+			myConnection = DriverManager.getConnection(url, userID, password1);
+			System.out.println("I am able to connect");
+			Statement st = myConnection.createStatement();
+
+			if(login.getRole() == "customer"){
+				String pw = login.getPassword();
+				String name = login.getUsername();
+				//TODO: uncomment after adding password field to customer
+				//st.executeUpdate("update customer set password='"+pw+"' where Email='"+name+"'");
+				return "success";
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("Login not successfull");
+		return "failure";
+
 		/*Sample data begins*/
-		return "success";
+		//return "success";
 		/*Sample data ends*/
 	}
 
