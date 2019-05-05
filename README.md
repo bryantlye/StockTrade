@@ -10,7 +10,7 @@ Database name is "new_schema" <br/>
 Database username is "root" <br/>
 Database password is "root" <br/>
 
-Here are the last of initial informations. 
+Here are the last of initial informations.  <br/>
 syang@cs.sunysb.edu,1,Customer <br/>
 vicdu@cs.sunysb.edu,2, Customer <br/>
 jsmith@ic.sunysb.edu,3, Customer <br/>
