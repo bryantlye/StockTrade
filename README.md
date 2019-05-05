@@ -6,18 +6,18 @@ are attached above. For the demo data, we only added stocks, initial customers, 
 login information to start out with. We using IntelliJ to complete our project.
 
 
-Database name is "new_schema"
-Database username is "root"
-Database password is "root"
+Database name is "new_schema" <br/>
+Database username is "root" <br/>
+Database password is "root" <br/>
 
 Here are the last of initial informations. 
-syang@cs.sunysb.edu,1,Customer
-vicdu@cs.sunysb.edu,2, Customer
-jsmith@ic.sunysb.edu,3, Customer
-pml@cs.sunysb.edu,4, Customer
-davidsm@cs.sunysb.edu,5, Customer Rep
-davidwa@cs.sunysb.edu,6, Customer Rep
-bob@cs.sunysb.edu,7, Manager
+syang@cs.sunysb.edu,1,Customer <br/>
+vicdu@cs.sunysb.edu,2, Customer <br/>
+jsmith@ic.sunysb.edu,3, Customer <br/>
+pml@cs.sunysb.edu,4, Customer <br/>
+davidsm@cs.sunysb.edu,5, Customer Rep <br/>
+davidwa@cs.sunysb.edu,6, Customer Rep <br/>
+bob@cs.sunysb.edu,7, Manager <br/>
 
 For the some of the stock transactions since it didn't explicit say how we should do it, we explain how we thought we 
 should implement it to prevent confusion.
