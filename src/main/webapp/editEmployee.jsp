@@ -1,6 +1,6 @@
 <%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="model.Customer"%>
+<%@page import="model.Employee"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
@@ -49,15 +49,15 @@
 	  </div>
    	  <div class="form-group">
 	    <label for="employeeCity">City</label>
-	    <input type="text" class="form-control" id="employeeCity" name="employeeCity" placeholder="City" value=${editEmployee.city} required>
+	    <input type="text" class="form-control" id="employeeCity" name="employeeCity" placeholder="City" value=${editEmployee.location.city} required>
 	  </div>
    	  <div class="form-group">
 	    <label for="employeeState">State</label>
-	    <input type="text" class="form-control" id="employeeState" name="employeeState" placeholder="State" value=${editEmployee.state} required>
+	    <input type="text" class="form-control" id="employeeState" name="employeeState" placeholder="State" value=${editEmployee.location.state} required>
 	  </div>
    	  <div class="form-group">
 	    <label for="employeeZipcode">Zipcode</label>
-	    <input type="text" class="form-control" id="employeeZipcode" name="employeeZipcode" placeholder="Zipcode" value=${editEmployee.zipCode} required>
+	    <input type="text" class="form-control" id="employeeZipcode" name="employeeZipcode" placeholder="Zipcode" value=${editEmployee.location.zipCode} required>
 	  </div>
    	  <div class="form-group">
 	    <label for="employeeTelephone">Telephone</label>
@@ -65,7 +65,7 @@
 	  </div>
    	  <div class="form-group">
 	    <label for="employeeSSN">SSN (Employee ID)</label>
-	    <input type="text" class="form-control" id="employeeSSN" name="employeeSSN" placeholder="XXX-XX-XXXX" value=${editEmployee.employeeID} readonly>
+	    <input type="text" class="form-control" id="employeeSSN" name="employeeSSN" placeholder="XXX-XX-XXXX" value=${editEmployee.id} readonly>
 	  </div>
    	  <div class="form-group">
 	    <label for="employeeStartDate">Start Date</label>

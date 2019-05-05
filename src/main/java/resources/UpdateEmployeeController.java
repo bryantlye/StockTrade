@@ -66,6 +66,7 @@ public class UpdateEmployeeController extends HttpServlet {
 		employee.setTelephone(telephone);
 		employee.setEmployeeID(ssn);
 		employee.setSsn(ssn);
+		employee.setId(ssn);
 		employee.setHourlyRate(hourlyRate);
         employee.setLocation(location);
 

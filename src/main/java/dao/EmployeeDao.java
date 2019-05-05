@@ -1,161 +1,250 @@
 package dao;
 
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import model.Customer;
 import model.Employee;
 import model.Location;
+import sun.misc.FloatingDecimal;
 
 public class EmployeeDao {
-	/*
-	 * This class handles all the database operations related to the employee table
-	 */
-
-    public Employee getDummyEmployee()
-    {
-        Employee employee = new Employee();
-
-        Location location = new Location();
-        location.setCity("Stony Brook");
-        location.setState("NY");
-        location.setZipCode(11790);
-
-		/*Sample data begins*/
-        employee.setEmail("shiyong@cs.sunysb.edu");
-        employee.setFirstName("Shiyong");
-        employee.setLastName("Lu");
-        employee.setLocation(location);
-        employee.setAddress("123 Success Street");
-        employee.setStartDate("2006-10-17");
-        employee.setTelephone("5166328959");
-        employee.setEmployeeID("631-413-5555");
-        employee.setHourlyRate(100);
-		/*Sample data ends*/
-
-        return employee;
-    }
-
-    public List<Employee> getDummyEmployees()
-    {
-       List<Employee> employees = new ArrayList<Employee>();
-
-        for(int i = 0; i < 10; i++)
-        {
-            employees.add(getDummyEmployee());
-        }
-
-        return employees;
-    }
 
 	public String addEmployee(Employee employee) {
-
-		/*
-		 * All the values of the add employee form are encapsulated in the employee object.
-		 * These can be accessed by getter methods (see Employee class in model package).
-		 * e.g. firstName can be accessed by employee.getFirstName() method.
-		 * The sample code returns "success" by default.
-		 * You need to handle the database insertion of the employee details and return "success" or "failure" based on result of the database insertion.
-		 */
-		
-		/*Sample data begins*/
+		java.sql.Connection myConnection = null;
+		try {
+			String mysJDBCDriver = "com.mysql.jdbc.Driver";
+			String url = "jdbc:mysql://localhost:3306/new_schema";
+			String userID = "root";
+			String password1 = "root";
+			Class.forName(mysJDBCDriver).newInstance();
+			java.util.Properties mysys = System.getProperties();
+			mysys.put("user", userID);
+			mysys.put("password", password1);
+			myConnection = DriverManager.getConnection(url, mysys);
+			String query = " insert into Employee values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			PreparedStatement preparedStmt = myConnection.prepareStatement(query);
+			preparedStmt.setString(1, employee.getLastName());
+			preparedStmt.setString (2, employee.getFirstName());
+			preparedStmt.setString (3, employee.getEmail());
+			preparedStmt.setString (4, employee.getAddress());
+			preparedStmt.setString (5, employee.getLocation().getCity());
+			preparedStmt.setString (6, employee.getLocation().getState());
+			preparedStmt.setString (7, Integer.toString(employee.getLocation().getZipCode()));
+			preparedStmt.setString (8, employee.getTelephone());
+			preparedStmt.setInt (9, Integer.parseInt(employee.getSsn()));
+			preparedStmt.setInt (10, Integer.parseInt(employee.getSsn()));
+			preparedStmt.setDate (11, Date.valueOf(employee.getStartDate()));
+			preparedStmt.setDouble(12,employee.getHourlyRate());
+			preparedStmt.executeUpdate();
+		}
+		catch(Exception e){
+			System.out.print(e);
+		}
 		return "success";
-		/*Sample data ends*/
-
 	}
 
 	public String editEmployee(Employee employee) {
-		/*
-		 * All the values of the edit employee form are encapsulated in the employee object.
-		 * These can be accessed by getter methods (see Employee class in model package).
-		 * e.g. firstName can be accessed by employee.getFirstName() method.
-		 * The sample code returns "success" by default.
-		 * You need to handle the database update and return "success" or "failure" based on result of the database update.
-		 */
-		
-		/*Sample data begins*/
+		java.sql.Connection myConnection = null;
+		try {
+			String mysJDBCDriver = "com.mysql.jdbc.Driver";
+			String url = "jdbc:mysql://localhost:3306/new_schema";
+			String userID = "root";
+			String password1 = "root";
+
+			Class.forName(mysJDBCDriver).newInstance();
+			java.util.Properties mysys = System.getProperties();
+			mysys.put("user", userID);
+			mysys.put("password", password1);
+			myConnection = DriverManager.getConnection(url, mysys);
+
+			String query = " UPDATE Employee SET LastName = ?, FirstName = ?, Email = ?, Address = ?,  City = ?, State = ?, ZipCode = ?, Telephone = ?, StartDate = ?, HourlyRate = ? WHERE ID = ?";
+			PreparedStatement preparedStmt = myConnection.prepareStatement(query);
+			preparedStmt.setString (1, employee.getLastName());
+			preparedStmt.setString (2, employee.getFirstName());
+			preparedStmt.setString (3, employee.getAddress());
+			preparedStmt.setString (4, employee.getEmail());
+			preparedStmt.setString (5, employee.getLocation().getCity());
+			preparedStmt.setString (6, employee.getLocation().getState());
+			preparedStmt.setString (7, Integer.toString(employee.getLocation().getZipCode()));
+			preparedStmt.setString (8, employee.getTelephone());
+			preparedStmt.setDate(9, Date.valueOf(employee.getStartDate()));
+			preparedStmt.setDouble(10, employee.getHourlyRate());
+			preparedStmt.setDouble(11, Integer.parseInt(employee.getId()));
+			preparedStmt.executeUpdate();
+
+			try {
+				myConnection.close();
+			}
+			catch (Exception e) {
+				System.out.print(e);
+			}
+		}
+		catch(Exception e) {
+			System.out.print(e);
+		}
 		return "success";
-		/*Sample data ends*/
 
 	}
 
 	public String deleteEmployee(String employeeID) {
-		/*
-		 * employeeID, which is the Employee's ID which has to be deleted, is given as method parameter
-		 * The sample code returns "success" by default.
-		 * You need to handle the database deletion and return "success" or "failure" based on result of the database deletion.
-		 */
-		
-		/*Sample data begins*/
-		return "success";
-		/*Sample data ends*/
+		java.sql.Connection myConnection = null;
+		try {
+			String mysJDBCDriver = "com.mysql.jdbc.Driver";
+			String url = "jdbc:mysql://localhost:3306/new_schema";
+			String userID = "root";
+			String password1 = "root";
+			Class.forName(mysJDBCDriver).newInstance();
+			java.util.Properties mysys = System.getProperties();
+			mysys.put("user", userID);
+			mysys.put("password", password1);
+			myConnection = DriverManager.getConnection(url, mysys);
+			Statement myStatement = myConnection.createStatement();
+			ResultSet resultSet = myStatement.executeQuery("select * from Employee where ID='"+employeeID+"';");
 
+			if(resultSet.next()){
+				String email = resultSet.getString("Email");
+				String queryy = " delete from Login WHERE UserName = ?";
+				PreparedStatement preparedStmtt = myConnection.prepareStatement(queryy);
+				preparedStmtt.setString(1, email);
+				preparedStmtt.execute();
+				String query = " delete from Employee WHERE ID = ?";
+				PreparedStatement preparedStmt = myConnection.prepareStatement(query);
+				preparedStmt.setInt(1, Integer.parseInt(employeeID));
+				preparedStmt.execute();
+			}
+			try {
+				myConnection.close();
+			} catch (Exception e) {
+				System.out.print(e);
+			}
+		}
+		catch (Exception e){
+			System.out.print(e);
+		}
+		return "success";
 	}
 
-	
 	public List<Employee> getEmployees() {
-
-		/*
-		 * The students code to fetch data from the database will be written here
-		 * Query to return details about all the employees must be implemented
-		 * Each record is required to be encapsulated as a "Employee" class object and added to the "employees" List
-		 */
-
 		List<Employee> employees = new ArrayList<Employee>();
-
-		Location location = new Location();
-		location.setCity("Stony Brook");
-		location.setState("NY");
-		location.setZipCode(11790);
-
-		/*Sample data begins*/
-		for (int i = 0; i < 10; i++) {
-			Employee employee = new Employee();
-			employee.setId("111-11-1111");
-			employee.setEmail("shiyong@cs.sunysb.edu");
-			employee.setFirstName("Shiyong");
-			employee.setLastName("Lu");
-			employee.setAddress("123 Success Street");
-			employee.setLocation(location);
-			employee.setTelephone("5166328959");
-			employee.setEmployeeID("631-413-5555");
-			employee.setHourlyRate(100);
-			employees.add(employee);
+		java.sql.Connection myConnection = null;
+		try {
+			String mysJDBCDriver = "com.mysql.jdbc.Driver";
+			String url = "jdbc:mysql://localhost:3306/new_schema";
+			String userID = "root";
+			String password1 = "root";
+			Class.forName(mysJDBCDriver).newInstance();
+			java.util.Properties mysys = System.getProperties();
+			mysys.put("user", userID);
+			mysys.put("password", password1);
+			myConnection = DriverManager.getConnection(url, mysys);
+			Statement myStatement = myConnection.createStatement();
+			ResultSet resultSet = myStatement.executeQuery("select * from Employee;");
+			while (resultSet.next()) {
+				Employee employee = new Employee();
+				employee.setLastName(resultSet.getString("LastName"));
+				employee.setFirstName(resultSet.getString("FirstName"));
+				employee.setAddress(resultSet.getString("Address"));
+				Location location = new Location();
+				location.setCity(resultSet.getString("City"));
+				location.setState(resultSet.getString("State"));
+				location.setZipCode(Integer.parseInt(resultSet.getString("ZipCode")));
+				employee.setLocation(location);
+				employee.setTelephone(resultSet.getString("Telephone"));
+				employee.setEmail(resultSet.getString("Email"));
+				employee.setId(Integer.toString(resultSet.getInt("ID")));
+				employee.setSsn(Integer.toString(resultSet.getInt("ID")));
+				employee.setHourlyRate(Float.parseFloat(resultSet.getString("HourlyRate")));
+				employee.setStartDate(resultSet.getString("StartDate"));
+				employees.add(employee);
+			}
+			try {
+				myConnection.close();
+			} catch (SQLException e) {
+				System.out.print(e);
+			}
 		}
-		/*Sample data ends*/
-		
+		catch(Exception e){
+			System.out.print(e);
+		}
 		return employees;
 	}
 
 	public Employee getEmployee(String employeeID) {
-
-		/*
-		 * The students code to fetch data from the database based on "employeeID" will be written here
-		 * employeeID, which is the Employee's ID who's details have to be fetched, is given as method parameter
-		 * The record is required to be encapsulated as a "Employee" class object
-		 */
-
-		return getDummyEmployee();
+		Employee employee = new Employee();
+		java.sql.Connection myConnection = null;
+		try {
+			String mysJDBCDriver = "com.mysql.jdbc.Driver";
+			String url = "jdbc:mysql://localhost:3306/new_schema";
+			String userID = "root";
+			String password1 = "root";
+			Class.forName(mysJDBCDriver).newInstance();
+			java.util.Properties mysys = System.getProperties();
+			mysys.put("user", userID);
+			mysys.put("password", password1);
+			myConnection = DriverManager.getConnection(url, mysys);
+			Statement myStatement= myConnection.createStatement();
+			ResultSet resultSet = myStatement.executeQuery("select * from Employee where ID='"+employeeID+"';");
+			while(resultSet.next()) {
+				Location location = new Location();
+				location.setZipCode(Integer.parseInt(resultSet.getString("ZipCode")));
+				location.setState(resultSet.getString("State"));
+				location.setCity(resultSet.getString("City"));
+				employee.setLocation(location);
+				employee.setLastName(resultSet.getString("LastName"));
+				employee.setFirstName(resultSet.getString("FirstName"));
+				employee.setAddress(resultSet.getString("Address").replace(" ","_"));
+				employee.setTelephone(resultSet.getString("Telephone"));
+				employee.setEmail(resultSet.getString("Email"));
+				employee.setStartDate(resultSet.getString("StartDate"));
+				employee.setHourlyRate(Float.parseFloat(resultSet.getString("HourlyRate")));
+				employee.setId(Integer.toString(resultSet.getInt("Id")));
+				employee.setSsn(Integer.toString(resultSet.getInt("Id")));
+			}
+			try {
+				myConnection.close();
+			} catch (Exception e) {
+				System.out.print(e);
+			}
+		} catch (Exception e) {
+			System.out.print(e);
+		}
+		return employee;
 	}
 	
 	public Employee getHighestRevenueEmployee() {
-		
-		/*
-		 * The students code to fetch employee data who generated the highest revenue will be written here
-		 * The record is required to be encapsulated as a "Employee" class object
-		 */
-		
-		return getDummyEmployee();
+
+		return null;
 	}
 
 	public String getEmployeeID(String username) {
-		/*
-		 * The students code to fetch data from the database based on "username" will be written here
-		 * username, which is the Employee's email address who's Employee ID has to be fetched, is given as method parameter
-		 * The Employee ID is required to be returned as a String
-		 */
-
-		return "111-11-1111";
+		String id=null;
+		java.sql.Connection myConnection = null;
+		try {
+			String mysJDBCDriver = "com.mysql.jdbc.Driver";
+			String url = "jdbc:mysql://localhost:3306/new_schema";
+			String userID = "root";
+			String password1 = "root";
+			Class.forName(mysJDBCDriver).newInstance();
+			java.util.Properties mysys = System.getProperties();
+			mysys.put("user", userID);
+			mysys.put("password", password1);
+			myConnection = DriverManager.getConnection(url, mysys);
+			Statement myStatement= myConnection.createStatement();
+			ResultSet resultSet = myStatement.executeQuery("select * from Employee where Email='"+username+"';");
+			while(resultSet.next()) {
+				id = resultSet.getInt("Id")+"";
+			}
+			try {
+				myConnection.close();
+			} catch (Exception e) {
+				System.out.print(e);
+			}
+		} catch (Exception e) {
+			System.out.print(e);
+		}
+		return id+"";
 	}
 
 }

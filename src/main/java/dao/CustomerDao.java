@@ -1,118 +1,58 @@
 package dao;
 
-import java.sql.Connection;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.*;
 
+import com.sun.org.apache.bcel.internal.generic.LASTORE;
 import model.Customer;
 import model.Location;
 
 public class CustomerDao {
-	/*
-	 * This class handles all the database operations related to the customer table
-	 */
 
-	public CustomerDao(){}
-
-    public Customer getDummyCustomer() {
-        Location location = new Location();
-        location.setZipCode(11790);
-        location.setCity("Stony Brook");
-        location.setState("NY");
-
-        Customer customer = new Customer();
-        customer.setId("111-11-1111");
-        customer.setAddress("123 Success Street");
-        customer.setLastName("Lu");
-        customer.setFirstName("Shiyong");
-        customer.setEmail("shiyong@cs.sunysb.edu");
-        customer.setLocation(location);
-        customer.setTelephone("5166328959");
-        customer.setCreditCard("1234567812345678");
-        customer.setRating(1);
-
-        return customer;
-    }
-    public List<Customer> getDummyCustomerList() {
-        /*Sample data begins*/
-        List<Customer> customers = new ArrayList<Customer>();
-
-        for (int i = 0; i < 10; i++) {
-            customers.add(getDummyCustomer());
-        }
-		/*Sample data ends*/
-
-        return customers;
-    }
-
-    /**
-	 * @param String searchKeyword
-	 * @return ArrayList<Customer> object
-	 */
 	public List<Customer> getCustomers(String searchKeyword) {
-		/*
-		 * This method fetches one or more customers based on the searchKeyword and returns it as an ArrayList
-		 */
-
-		List<Customer> customers = new ArrayList();
-		System.out.println("getCustomer is called String");
-		Connection myConnection = null;
+		List<Customer> customers = new ArrayList<Customer>();
+		java.sql.Connection myConnection = null;
 		try {
 			String mysJDBCDriver = "com.mysql.jdbc.Driver";
-			String url = "jdbc:mysql://localhost:3306/new_schema?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+			String url = "jdbc:mysql://localhost:3306/new_schema";
 			String userID = "root";
-			String password1 = "12345678";
-
-			Class.forName("com.mysql.jdbc.Driver");
-			myConnection = DriverManager.getConnection(url, userID, password1);
-			System.out.println("I am able to connect");
-			Statement st = myConnection.createStatement();
-			ResultSet resultSet = null;
-			if(searchKeyword == null) {
-				resultSet = st.executeQuery("select * from customer;");
-			}else{
-				resultSet = st.executeQuery("select * from customer where FirstName LIKE '%" + searchKeyword + "%' OR LastName LIKE '%" + searchKeyword + "';");
+			String password1 = "root";
+			Class.forName(mysJDBCDriver).newInstance();
+			java.util.Properties mysys = System.getProperties();
+			mysys.put("user", userID);
+			mysys.put("password", password1);
+			myConnection = DriverManager.getConnection(url, mysys);
+			Statement myStatement= myConnection.createStatement();
+			if(searchKeyword==null) {
+				ResultSet resultSet = myStatement.executeQuery("select * from Customer;");
+				while (resultSet.next()) {
+					Customer myCustomer = new Customer();
+					myCustomer.setLastName(resultSet.getString("LastName"));
+					myCustomer.setFirstName(resultSet.getString("FirstName"));
+					myCustomer.setAddress(resultSet.getString("Address"));
+					Location location = new Location();
+					location.setCity(resultSet.getString("City"));
+					location.setState(resultSet.getString("State"));
+					location.setZipCode(Integer.parseInt(resultSet.getString("ZipCode")));
+					myCustomer.setLocation(location);
+					myCustomer.setTelephone(resultSet.getString("Telephone"));
+					myCustomer.setEmail(resultSet.getString("Email"));
+					myCustomer.setRating(resultSet.getInt("Rating"));
+					myCustomer.setCreditCard(resultSet.getString("CreditCardNumber"));
+					myCustomer.setId(Integer.toString(resultSet.getInt("Id")));
+					customers.add(myCustomer);
+				}
+				try {
+					myConnection.close();
+				} catch (SQLException e) {
+					System.out.print(e);
+				}
 			}
-			while(resultSet.next()){
-				Customer customer = new Customer();
-				String email = resultSet.getString("email");
-				String lastName = resultSet.getString("LastName");
-				String firstName = resultSet.getString("FirstName");
-				String address = resultSet.getString("Address");
-				String city = resultSet.getString("city");
-				String state = resultSet.getString("state");
-				String zipcode = resultSet.getString("ZipCode");
-				String telephone = resultSet.getString("Telephone");
-				String creditCardNum = resultSet.getString("CreditCardNumber");
-				int rating = resultSet.getInt("Rating");
-				String customerID = resultSet.getString("Id");
-
-				customer.setEmail(email);
-				customer.setFirstName(firstName);
-				customer.setLastName(lastName);
-				customer.setAddress(address);
-				customer.setCreditCard(creditCardNum);
-				customer.setTelephone(telephone);
-				customer.setId(customerID);
-				customer.setRating(rating);
-				customers.add(customer);
-			}
-
-			System.out.println("I am able to connect in customer and print all");
-			System.out.println(customers);
-			try {
-				myConnection.close();
-				return customers;
-			} catch (SQLException var25) {
-			}
-		} catch (SQLException var26) {
-			System.out.println("Did not connect or put");
-			System.out.println(var26.getMessage());
-		} catch (ClassNotFoundException var29) {
-			var29.printStackTrace();
 		}
-
+		catch(Exception e){
+			System.out.print(e);
+		}
 		return customers;
 	}
 
@@ -124,307 +64,200 @@ public class CustomerDao {
 		 * The customer record is required to be encapsulated as a "Customer" class object
 		 */
 
-
-		return getDummyCustomer();
+		return null;
 	}
 
 	public Customer getCustomer(String customerID) {
-
-		/*
-		 * This method fetches the customer details and returns it
-		 * customerID, which is the Customer's ID who's details have to be fetched, is given as method parameter
-		 * The students code to fetch data from the database will be written here
-		 * The customer record is required to be encapsulated as a "Customer" class object
-		 */
-
-		Connection myConnection = null;
 		Customer customer = new Customer();
+		java.sql.Connection myConnection = null;
 		try {
 			String mysJDBCDriver = "com.mysql.jdbc.Driver";
-			String url = "jdbc:mysql://localhost:3306/new_schema?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+			String url = "jdbc:mysql://localhost:3306/new_schema";
 			String userID = "root";
-			String password1 = "12345678";
-
-			Class.forName("com.mysql.jdbc.Driver");
-			myConnection = DriverManager.getConnection(url, userID, password1);
-			System.out.println("I am able to connect");
-			Statement st = myConnection.createStatement();
-
-			ResultSet resultSet = st.executeQuery(" select * from customer WHERE Id = '"+customerID+"'");
-			while(resultSet.next()){
-				String email = resultSet.getString("email");
-				String lastName = resultSet.getString("LastName");
-				String firstName = resultSet.getString("FirstName");
-				String address = resultSet.getString("Address");
-				String city = resultSet.getString("city");
-				String state = resultSet.getString("state");
-				String zipcode = resultSet.getString("ZipCode");
-				String telephone = resultSet.getString("Telephone");
-				String creditCardNum = resultSet.getString("CreditCardNumber");
-				int rating = resultSet.getInt("Rating");
-
-				customer.setEmail(email);
-				customer.setFirstName(firstName);
-				customer.setLastName(lastName);
-				customer.setAddress(address);
-				customer.setCreditCard(creditCardNum);
-				customer.setTelephone(telephone);
-				customer.setId(customerID);
-				customer.setRating(rating);
+			String password1 = "root";
+			Class.forName(mysJDBCDriver).newInstance();
+			java.util.Properties mysys = System.getProperties();
+			mysys.put("user", userID);
+			mysys.put("password", password1);
+			myConnection = DriverManager.getConnection(url, mysys);
+			Statement myStatement= myConnection.createStatement();
+			int customer1 = Integer.parseInt(customerID);
+			ResultSet resultSet = myStatement.executeQuery("select * from Customer where Id='"+customer1+"';");
+			while(resultSet.next()) {
+				Location location = new Location();
+				location.setZipCode(Integer.parseInt(resultSet.getString("ZipCode")));
+				location.setState(resultSet.getString("State"));
+				location.setCity(resultSet.getString("City"));
+				customer.setLocation(location);
+				customer.setLastName(resultSet.getString("LastName"));
+				customer.setFirstName(resultSet.getString("FirstName"));
+				customer.setAddress(resultSet.getString("Address").replace(" ","_"));
+				customer.setTelephone(resultSet.getString("Telephone"));
+				customer.setEmail(resultSet.getString("Email"));
+				customer.setRating(resultSet.getInt("Rating"));
+				customer.setCreditCard(resultSet.getString("CreditCardNumber"));
+				customer.setId(Integer.toString(resultSet.getInt("Id")));
 			}
-
-		}catch(Exception e){e.printStackTrace();}
-
-
+			try {
+				myConnection.close();
+			} catch (Exception e) {
+				System.out.print(e);
+			}
+		} catch (Exception e) {
+			System.out.print(e);
+		}
 		return customer;
 	}
 	
 	public String deleteCustomer(String customerID) {
-
-		/*
-		 * This method deletes a customer returns "success" string on success, else returns "failure"
-		 * The students code to delete the data from the database will be written here
-		 * customerID, which is the Customer's ID who's details have to be deleted, is given as method parameter
-		 */
-
-		/*Sample data begins*/
-		Connection myConnection = null;
+		java.sql.Connection myConnection = null;
 		try {
 			String mysJDBCDriver = "com.mysql.jdbc.Driver";
-			String url = "jdbc:mysql://localhost:3306/new_schema?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+			String url = "jdbc:mysql://localhost:3306/new_schema";
 			String userID = "root";
-			String password1 = "12345678";
+			String password1 = "root";
+			Class.forName(mysJDBCDriver).newInstance();
+			java.util.Properties mysys = System.getProperties();
+			mysys.put("user", userID);
+			mysys.put("password", password1);
+			myConnection = DriverManager.getConnection(url, mysys);
+			Statement myStatement = myConnection.createStatement();
+			int customerid = Integer.parseInt(customerID);
+			ResultSet resultSet = myStatement.executeQuery("select * from Customer where Id='"+customerID+"';");
 
-			Class.forName("com.mysql.jdbc.Driver");
-			myConnection = DriverManager.getConnection(url, userID, password1);
-			System.out.println("I am able to connect");
-			Statement st = myConnection.createStatement();
-
-			String query = " delete from customer WHERE Id = ?";
-			PreparedStatement preparedStmt = myConnection.prepareStatement(query);
-			preparedStmt.setString(1, customerID);
-			preparedStmt.execute();
-			System.out.println("Delete success");
+			if(resultSet.next()){
+				String email = resultSet.getString("Email");
+				String queryy = " delete from Login WHERE UserName = ?";
+				PreparedStatement preparedStmtt = myConnection.prepareStatement(queryy);
+				preparedStmtt.setString(1, email);
+				preparedStmtt.execute();
+				String query = " delete from Customer WHERE Id = ?";
+				PreparedStatement preparedStmt = myConnection.prepareStatement(query);
+				preparedStmt.setInt(1, customerid);
+				preparedStmt.execute();
+			}
 			try {
 				myConnection.close();
-				return "success";
-			} catch (SQLException var12) {
-				return "success";
+			} catch (Exception e) {
+				System.out.print(e);
 			}
-
-		}catch(Exception e){e.printStackTrace();}
-
-
-		return "failure";
-		/*Sample data ends*/
-		
+		}
+		catch (Exception e){
+			System.out.print(e);
+		}
+		return "success";
 	}
 
 
 	public String getCustomerID(String email) {
-		/*
-		 * This method returns the Customer's ID based on the provided email address
-		 * The students code to fetch data from the database will be written here
-		 * username, which is the email address of the customer, who's ID has to be returned, is given as method parameter
-		 * The Customer's ID is required to be returned as a String
-		 */
-		Connection myConnection = null;
-		String id = "111-11-1111";
+		String id=null;
+		java.sql.Connection myConnection = null;
 		try {
 			String mysJDBCDriver = "com.mysql.jdbc.Driver";
-			String url = "jdbc:mysql://localhost:3306/new_schema?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+			String url = "jdbc:mysql://localhost:3306/new_schema";
 			String userID = "root";
-			String password1 = "12345678";
-
-			Class.forName("com.mysql.jdbc.Driver");
-			myConnection = DriverManager.getConnection(url, userID, password1);
-			System.out.println("I am able to connect");
-			Statement st = myConnection.createStatement();
-
-			ResultSet rs = st.executeQuery("select * from customer where Email='"+email+"';");
-			id = rs.getString("Id");
-
-			try {
-				myConnection.close();
-
-			} catch (SQLException var12) {
+			String password1 = "root";
+			Class.forName(mysJDBCDriver).newInstance();
+			java.util.Properties mysys = System.getProperties();
+			mysys.put("user", userID);
+			mysys.put("password", password1);
+			myConnection = DriverManager.getConnection(url, mysys);
+			Statement myStatement= myConnection.createStatement();
+			ResultSet resultSet = myStatement.executeQuery("select * from Customer where Email='"+email+"';");
+			while(resultSet.next()) {
+				id = resultSet.getInt("Id")+"";
 			}
-
-		}catch(Exception e){e.printStackTrace();}
-
-		return id;
-
-	}
-
-
-	public String editCustomer(Customer customer) {
-
-		/*
-		 * All the values of the add customer form are encapsulated in the customer object.
-		 * These can be accessed by getter methods (see Customer class in model package).
-		 * e.g. firstName can be accessed by customer.getFirstName() method.
-		 * The sample code returns "success" by default.
-		 * You need to handle the database insertion of the customer details and return "success" or "failure" based on result of the database insertion.
-		 */
-		Connection myConnection = null;
-		try {
-			String mysJDBCDriver = "com.mysql.jdbc.Driver";
-			String url = "jdbc:mysql://localhost:3306/new_schema?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-			String userID = "root";
-			String password1 = "12345678";
-
-			Class.forName("com.mysql.jdbc.Driver");
-			myConnection = DriverManager.getConnection(url, userID, password1);
-			System.out.println("I am able to connect");
-			Statement st = myConnection.createStatement();
-
-			String query = " update customer set LastName = ?, FirstName = ?, Address = ?, City = ?, State = ?, ZipCode = ?, Telephone = ?, Email = ?, Rating = ?, CreditCardNumber = ? where Id = ?";
-			PreparedStatement preparedStmt = myConnection.prepareStatement(query);
-			preparedStmt.setString(1, customer.getLastName());
-			preparedStmt.setString(2, customer.getFirstName());
-			preparedStmt.setString(3, customer.getAddress());
-			preparedStmt.setString(4, "");
-			preparedStmt.setString(5, "");
-			preparedStmt.setString(6, "");
-			preparedStmt.setString(7, customer.getTelephone());
-			//TODO: fix Fata too long for column 'Email' at row 1 Exception
-			preparedStmt.setString(8, customer.getEmail());
-			preparedStmt.setInt(9, customer.getRating());
-			preparedStmt.setString(10, customer.getCreditCard());
-			preparedStmt.setString(11, customer.getId());
-			preparedStmt.executeUpdate();
-			System.out.println("Customer is edited");
 			try {
 				myConnection.close();
-				return "success";
-			} catch (SQLException var16) {var16.printStackTrace(); }
-		}catch(Exception e){
-			e.printStackTrace();
-
+			} catch (Exception e) {
+				System.out.print(e);
+			}
+		} catch (Exception e) {
+			System.out.print(e);
 		}
-		return "failure";
-		/*Sample data begins*/
-
-		/*Sample data ends*/
-
+		System.out.print(id);
+		return id+"";
 	}
+
 
 	public String addCustomer(Customer customer) {
-		/*
-		 * All the values of the edit customer form are encapsulated in the customer object.
-		 * These can be accessed by getter methods (see Customer class in model package).
-		 * e.g. firstName can be accessed by customer.getFirstName() method.
-		 * The sample code returns "success" by default.
-		 * You need to handle the database update and return "success" or "failure" based on result of the database update.
-		 */
-		Connection myConnection = null;
+		java.sql.Connection myConnection = null;
 		try {
 			String mysJDBCDriver = "com.mysql.jdbc.Driver";
-			String url = "jdbc:mysql://localhost:3306/new_schema?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+			String url = "jdbc:mysql://localhost:3306/new_schema";
 			String userID = "root";
-			String password1 = "12345678";
-
-			Class.forName("com.mysql.jdbc.Driver");
-			myConnection = DriverManager.getConnection(url, userID, password1);
-			System.out.println("I am able to connect");
-			Statement st = myConnection.createStatement();
-
-			String query = " insert into customer (LastName, FirstName, Address, City, State, ZipCode, Telephone, Email, Rating, CreditCardNumber, Id) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			String password1 = "root";
+			Class.forName(mysJDBCDriver).newInstance();
+			java.util.Properties mysys = System.getProperties();
+			mysys.put("user", userID);
+			mysys.put("password", password1);
+			myConnection = DriverManager.getConnection(url, mysys);
+			String query = " insert into Customer values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparedStmt = myConnection.prepareStatement(query);
 			preparedStmt.setString(1, customer.getLastName());
-			preparedStmt.setString(2, customer.getFirstName());
-			preparedStmt.setString(3, customer.getAddress());
-			preparedStmt.setString(4, "");
-			preparedStmt.setString(5, "");
-			preparedStmt.setString(6, "");
-			preparedStmt.setString(7, customer.getTelephone());
-			//TODO: fix Fata too long for column 'Email' at row 1 Exception
-			preparedStmt.setString(8, customer.getEmail());
+			preparedStmt.setString (2, customer.getFirstName());
+			preparedStmt.setString (3, customer.getAddress());
+			preparedStmt.setString (4, customer.getLocation().getCity());
+			preparedStmt.setString (5, customer.getLocation().getState());
+			preparedStmt.setString (6, Integer.toString(customer.getLocation().getZipCode()));
+			preparedStmt.setString (7, customer.getTelephone());
+			preparedStmt.setString (8, customer.getEmail());
+			preparedStmt.setInt (9, customer.getRating());
+			preparedStmt.setString (10, customer.getCreditCard());
+			preparedStmt.setInt (11, Integer.parseInt(customer.getId()));
+			preparedStmt.executeUpdate();
+		}
+		catch(Exception e){
+			System.out.print(e);
+		}
+		return "success";
+	}
+
+	public String editCustomer(Customer customer) {
+		java.sql.Connection myConnection = null;
+		try {
+			String mysJDBCDriver = "com.mysql.jdbc.Driver";
+			String url = "jdbc:mysql://localhost:3306/new_schema";
+			String userID = "root";
+			String password1 = "root";
+
+			Class.forName(mysJDBCDriver).newInstance();
+			java.util.Properties mysys = System.getProperties();
+			mysys.put("user", userID);
+			mysys.put("password", password1);
+			myConnection = DriverManager.getConnection(url, mysys);
+			String query = " UPDATE Customer SET LastName = ?, FirstName = ?, Address = ?,  City = ?, State = ?, ZipCode = ?, Telephone = ?, Email = ?, Rating =?, CreditCardNumber=? WHERE Id = ?";
+			PreparedStatement preparedStmt = myConnection.prepareStatement(query);
+			preparedStmt.setString (1, customer.getLastName());
+			preparedStmt.setString (2, customer.getFirstName());
+			preparedStmt.setString (3, customer.getAddress());
+			preparedStmt.setString (4, customer.getLocation().getCity());
+			preparedStmt.setString (5, customer.getLocation().getState());
+			preparedStmt.setString (6, Integer.toString(customer.getLocation().getZipCode()));
+			preparedStmt.setString (7, customer.getTelephone());
+			preparedStmt.setString (8, customer.getEmail());
 			preparedStmt.setInt(9, customer.getRating());
 			preparedStmt.setString(10, customer.getCreditCard());
-			preparedStmt.setString(11, customer.getId());
+			preparedStmt.setInt(11, Integer.parseInt(customer.getId()));
 			preparedStmt.executeUpdate();
-			System.out.println("Customer is added");
 			try {
 				myConnection.close();
-				return "success";
-			} catch (SQLException var16) {var16.printStackTrace(); }
-		}catch(Exception e){
-			e.printStackTrace();
-
+			}
+			catch (SQLException e) {
+				System.out.print(e);
+			}
 		}
-		return "failure";
-
+		catch(Exception e) {
+			System.out.print(e);
+		}
+		return "success";
 	}
 
     public List<Customer> getCustomerMailingList() {
-
-		/*
-		 * This method fetches the all customer mailing details and returns it
-		 * The students code to fetch data from the database will be written here
-		 */
-
-        return getDummyCustomerList();
+        return getCustomers(null);
     }
 
     public List<Customer> getAllCustomers() {
-        /*
-		 * This method fetches returns all customers
-		 */
-		List<Customer> customers = new ArrayList();
-		Connection myConnection = null;
-
-		try {
-			String mysJDBCDriver = "com.mysql.jdbc.Driver";
-			String url = "jdbc:mysql://localhost:3306/new_schema?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-			String userID = "root";
-			String password1 = "12345678";
-
-			Class.forName("com.mysql.jdbc.Driver");
-			myConnection = DriverManager.getConnection(url, userID, password1);
-			System.out.println("I am able to connect");
-			Statement st = myConnection.createStatement();
-			ResultSet resultSet = st.executeQuery("select * from customer;");
-
-			while(resultSet.next()){
-				Customer customer = new Customer();
-				String email = resultSet.getString("email");
-				String lastName = resultSet.getString("LastName");
-				String firstName = resultSet.getString("FirstName");
-				String address = resultSet.getString("Address");
-				String city = resultSet.getString("city");
-				String state = resultSet.getString("state");
-				String zipcode = resultSet.getString("ZipCode");
-				String telephone = resultSet.getString("Telephone");
-				String creditCardNum = resultSet.getString("CreditCardNumber");
-				int rating = resultSet.getInt("Rating");
-				String customerID = resultSet.getString("Id");
-
-				customer.setEmail(email);
-				customer.setFirstName(firstName);
-				customer.setLastName(lastName);
-				customer.setAddress(address);
-				customer.setCreditCard(creditCardNum);
-				customer.setTelephone(telephone);
-				customer.setId(customerID);
-				customer.setRating(rating);
-				customers.add(customer);
-			}
-
-			System.out.println("I am able to connect in customer and print all");
-
-			try {
-				myConnection.close();
-				return customers;
-			} catch (SQLException var26) {
-			}
-		} catch (SQLException var27) {
-			System.out.println("Did not connect or put");
-			System.out.println(var27.getMessage());
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-
-		return customers;
-    }
+		return getCustomers(null);
+	}
 }

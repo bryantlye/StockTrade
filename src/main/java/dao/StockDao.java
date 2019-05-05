@@ -1,13 +1,19 @@
 package dao;
 
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import model.Customer;
+import model.Location;
 import model.Stock;
+
+import javax.xml.transform.Result;
 
 public class StockDao {
 
+    static int start =0;
     public Stock getDummyStock() {
         Stock stock = new Stock();
         stock.setName("Apple");
@@ -31,56 +37,115 @@ public class StockDao {
         return stocks;
     }
 
-    public List<Stock> getActivelyTradedStocks() {
-
-		/*
-		 * The students code to fetch data from the database will be written here
-		 * Query to fetch details of all the stocks has to be implemented
-		 * Return list of actively traded stocks
-		 */
-
-        return getDummyStocks();
-
-    }
-
 	public List<Stock> getAllStocks() {
-		
-		/*
-		 * The students code to fetch data from the database will be written here
-		 * Return list of stocks
-		 */
-		
-		return getDummyStocks();
-
+        List<Stock> stocks = new ArrayList<Stock>();
+        java.sql.Connection myConnection = null;
+        try {
+            String mysJDBCDriver = "com.mysql.jdbc.Driver";
+            String url = "jdbc:mysql://localhost:3306/new_schema";
+            String userID = "root";
+            String password1 = "root";
+            Class.forName(mysJDBCDriver).newInstance();
+            java.util.Properties mysys = System.getProperties();
+            mysys.put("user", userID);
+            mysys.put("password", password1);
+            myConnection = DriverManager.getConnection(url, mysys);
+            Statement myStatement = myConnection.createStatement();
+            ResultSet resultSet = myStatement.executeQuery("select * from Stock;");
+            while (resultSet.next()) {
+                Stock myStock = new Stock();
+                myStock.setName(resultSet.getString("StockName"));
+                myStock.setSymbol(resultSet.getString("StockSymbol"));
+                myStock.setType(resultSet.getString("StockType"));
+                myStock.setPrice(resultSet.getDouble("PricePerShare"));
+                myStock.setNumShares(resultSet.getInt("NumberShares"));
+                stocks.add(myStock);
+            }
+            try {
+                myConnection.close();
+            } catch (Exception e) {
+                System.out.print(e);
+            }
+        }
+        catch (Exception e) {
+            System.out.print(e);
+        }
+		return stocks;
 	}
 
-    public Stock getStockBySymbol(String stockSymbol)
-    {
-        /*
-		 * The students code to fetch data from the database will be written here
-		 * Return stock matching symbol
-		 */
-        return getDummyStock();
+    public Stock getStockBySymbol(String stockSymbol) {
+        Stock myStock = new Stock();
+        java.sql.Connection myConnection = null;
+        try {
+            String mysJDBCDriver = "com.mysql.jdbc.Driver";
+            String url = "jdbc:mysql://localhost:3306/new_schema";
+            String userID = "root";
+            String password1 = "root";
+            Class.forName(mysJDBCDriver).newInstance();
+            java.util.Properties mysys = System.getProperties();
+            mysys.put("user", userID);
+            mysys.put("password", password1);
+            myConnection = DriverManager.getConnection(url, mysys);
+            Statement myStatement = myConnection.createStatement();
+            ResultSet resultSet = myStatement.executeQuery("select * from Stock where StockSymbol='"+stockSymbol+"';");
+            while(resultSet.next()) {
+                myStock.setName(resultSet.getString("StockName"));
+                myStock.setSymbol(resultSet.getString("StockSymbol"));
+                myStock.setType(resultSet.getString("StockType"));
+                myStock.setPrice(resultSet.getDouble("PricePerShare"));
+                myStock.setNumShares(resultSet.getInt("NumberShares"));
+            }
+            try {
+                myConnection.close();
+            } catch (Exception e) {
+                System.out.print(e);
+            }
+        }
+        catch(Exception e) {
+            System.out.print(e);
+        }
+        System.out.print(myStock.getSymbol());
+        return myStock;
     }
 
     public String setStockPrice(String stockSymbol, double stockPrice) {
-        /*
-         * The students code to fetch data from the database will be written here
-         * Perform price update of the stock symbol
-         */
+        java.sql.Connection myConnection = null;
+        try {
+            String mysJDBCDriver = "com.mysql.jdbc.Driver";
+            String url = "jdbc:mysql://localhost:3306/new_schema";
+            String userID = "root";
+            String password1 = "root";
+
+            Class.forName(mysJDBCDriver).newInstance();
+            java.util.Properties mysys = System.getProperties();
+            mysys.put("user", userID);
+            mysys.put("password", password1);
+            myConnection = DriverManager.getConnection(url, mysys);
+            String query = " UPDATE Stock SET PricePerShare = ? WHERE StockSymbol = ?";
+            PreparedStatement preparedStmt = myConnection.prepareStatement(query);
+            preparedStmt.setDouble (1, stockPrice);
+            preparedStmt.setString (2, stockSymbol);
+            preparedStmt.executeUpdate();
+
+            try {
+                myConnection.close();
+            } catch (Exception e) {
+                System.out.print(e);
+            }
+        }
+        catch (Exception e) {
+            System.out.print(e);
+        }
 
         return "success";
     }
 	
 	public List<Stock> getOverallBestsellers() {
-
 		/*
 		 * The students code to fetch data from the database will be written here
 		 * Get list of bestseller stocks
 		 */
-
 		return getDummyStocks();
-
 	}
 
     public List<Stock> getCustomerBestsellers(String customerID) {
@@ -89,73 +154,213 @@ public class StockDao {
 		 * The students code to fetch data from the database will be written here.
 		 * Get list of customer bestseller stocks
 		 */
-
         return getDummyStocks();
-
-    }
-
-	public List getStocksByCustomer(String customerId) {
-
-		/*
-		 * The students code to fetch data from the database will be written here
-		 * Get stockHoldings of customer with customerId
-		 */
-
-		return getDummyStocks();
-	}
-
-    public List<Stock> getStocksByName(String name) {
-
-		/*
-		 * The students code to fetch data from the database will be written here
-		 * Return list of stocks matching "name"
-		 */
-
-        return getDummyStocks();
-    }
-
-    public List<Stock> getStockSuggestions(String customerID) {
-
-		/*
-		 * The students code to fetch data from the database will be written here
-		 * Return stock suggestions for given "customerId"
-		 */
-
-        return getDummyStocks();
-
     }
 
     public List<Stock> getStockPriceHistory(String stockSymbol) {
 
-		/*
-		 * The students code to fetch data from the database
-		 * Return list of stock objects, showing price history
-		 */
-
         return getDummyStocks();
+    }
+
+	public List getStocksByCustomer(String customerId) {
+        List<Stock> stocks = new ArrayList<Stock>();
+        java.sql.Connection myConnection = null;
+        try {
+            String mysJDBCDriver = "com.mysql.jdbc.Driver";
+            String url = "jdbc:mysql://localhost:3306/new_schema";
+            String userID = "root";
+            String password1 = "root";
+            Class.forName(mysJDBCDriver).newInstance();
+            java.util.Properties mysys = System.getProperties();
+            mysys.put("user", userID);
+            mysys.put("password", password1);
+            myConnection = DriverManager.getConnection(url, mysys);
+            Statement myStatement = myConnection.createStatement();
+            ResultSet resultSet = myStatement.executeQuery("select * from trade T, stock S where T.StockId = S.StockName and T.AccountId='" + customerId +"'GROUP BY T.StockId");
+            while(resultSet.next()){
+                Stock stock = new Stock();
+                stock.setName(resultSet.getString("StockName"));
+                stock.setSymbol(resultSet.getString("StockSymbol"));
+                stock.setPrice(resultSet.getDouble("PricePerShare"));
+                stock.setType(resultSet.getString("StockType"));
+                stocks.add(stock);
+            }
+            try {
+                myConnection.close();
+            } catch (Exception e) {
+                System.out.print(e);
+            }
+        }
+        catch (Exception e){
+            System.out.print(e);
+        }
+		return stocks;
+	}
+
+    public List<Stock> getActivelyTradedStocks() {
+        List<Stock> stocks = new ArrayList<Stock>();
+        java.sql.Connection myConnection = null;
+        try {
+            String mysJDBCDriver = "com.mysql.jdbc.Driver";
+            String url = "jdbc:mysql://localhost:3306/new_schema";
+            String userID = "root";
+            String password1 = "root";
+            Class.forName(mysJDBCDriver).newInstance();
+            java.util.Properties mysys = System.getProperties();
+            mysys.put("user", userID);
+            mysys.put("password", password1);
+            myConnection = DriverManager.getConnection(url, mysys);
+            Statement myStatement = myConnection.createStatement();
+            ResultSet resultSet = myStatement.executeQuery("SELECT StockId, COUNT(*) AS Number FROM trade GROUP BY StockId ORDER BY Number DESC");
+            int number=0;
+            int counter =0;
+            while(resultSet.next()){
+                if(counter!=0 && resultSet.getInt("Number")<number){
+                    break;
+                }
+                else{
+                    number = resultSet.getInt("Number");
+                }
+                String stock = resultSet.getString("StockId");
+                stocks.add(getStocksByName(stock).get(0));
+                counter++;
+            }
+        }
+        catch (Exception e){
+            System.out.print(e);
+        }
+
+        return stocks;
+    }
+
+    public List<Stock> getStockSuggestions(String customerID) {
+        List<Stock> stocks = new ArrayList<Stock>();
+        java.sql.Connection myConnection = null;
+        try {
+            String mysJDBCDriver = "com.mysql.jdbc.Driver";
+            String url = "jdbc:mysql://localhost:3306/new_schema";
+            String userID = "root";
+            String password1 = "root";
+            Class.forName(mysJDBCDriver).newInstance();
+            java.util.Properties mysys = System.getProperties();
+            mysys.put("user", userID);
+            mysys.put("password", password1);
+            myConnection = DriverManager.getConnection(url, mysys);
+            Statement myStatement = myConnection.createStatement();
+            if(start==1) {
+                myStatement.executeUpdate("DROP View stocklist");
+            }
+            myStatement.executeUpdate("CREATE VIEW stocklist AS SELECT t.StockId FROM trade t, stock S WHERE t.AccountId ='" + customerID + "' and t.StockId = S.StockName GROUP BY t.StockId");
+            start =1;
+
+           ResultSet resultSet = myStatement.executeQuery("SELECT StockName FROM stock WHERE StockName NOT IN (SELECT StockId From stocklist)");
+            while(resultSet.next()){
+                stocks.add(getStocksByName(resultSet.getString("StockName")).get(0));
+            }
+        }
+        catch (Exception e){
+            System.out.print(e);
+        }
+
+        return stocks;
+
+    }
+
+    public List<Stock> getStocksByName(String name) {
+        List<Stock> stocks = new ArrayList<Stock>();
+        java.sql.Connection myConnection = null;
+        try {
+            String mysJDBCDriver = "com.mysql.jdbc.Driver";
+            String url = "jdbc:mysql://localhost:3306/new_schema";
+            String userID = "root";
+            String password1 = "root";
+            Class.forName(mysJDBCDriver).newInstance();
+            java.util.Properties mysys = System.getProperties();
+            mysys.put("user", userID);
+            mysys.put("password", password1);
+            myConnection = DriverManager.getConnection(url, mysys);
+            Statement myStatement = myConnection.createStatement();
+            ResultSet resultSet = myStatement.executeQuery("select * from Stock where StockName='" + name + "';");
+            while (resultSet.next()) {
+                Stock myStock = new Stock();
+                myStock.setName(resultSet.getString("StockName"));
+                myStock.setSymbol(resultSet.getString("StockSymbol"));
+                myStock.setType(resultSet.getString("StockType"));
+                myStock.setPrice(resultSet.getDouble("PricePerShare"));
+                myStock.setNumShares(resultSet.getInt("NumberShares"));
+                stocks.add(myStock);
+            }
+            try {
+                myConnection.close();
+            } catch (Exception e) {
+                System.out.print(e);
+            }
+        }
+        catch (Exception e) {
+            System.out.print(e);
+        }
+
+        return stocks;
     }
 
     public List<String> getStockTypes() {
-
-		/*
-		 * The students code to fetch data from the database will be written here.
-		 * Populate types with stock types
-		 */
-
         List<String> types = new ArrayList<String>();
-        types.add("technology");
-        types.add("finance");
+        java.sql.Connection myConnection = null;
+        try {
+            String mysJDBCDriver = "com.mysql.jdbc.Driver";
+            String url = "jdbc:mysql://localhost:3306/new_schema";
+            String userID = "root";
+            String password1 = "root";
+            Class.forName(mysJDBCDriver).newInstance();
+            java.util.Properties mysys = System.getProperties();
+            mysys.put("user", userID);
+            mysys.put("password", password1);
+            myConnection = DriverManager.getConnection(url, mysys);
+            Statement myStatement = myConnection.createStatement();
+            ResultSet resultSet = myStatement.executeQuery("select DISTINCT(StockType) from Stock;");
+            while (resultSet.next()) {
+                types.add(resultSet.getString("StockType"));
+            }
+        }
+        catch (Exception e) {
+            System.out.print(e);
+        }
         return types;
-
     }
 
     public List<Stock> getStockByType(String stockType) {
-
-		/*
-		 * The students code to fetch data from the database will be written here
-		 * Return list of stocks of type "stockType"
-		 */
-
-        return getDummyStocks();
+        List<Stock> stocks = new ArrayList<Stock>();
+        java.sql.Connection myConnection = null;
+        try {
+            String mysJDBCDriver = "com.mysql.jdbc.Driver";
+            String url = "jdbc:mysql://localhost:3306/new_schema";
+            String userID = "root";
+            String password1 = "root";
+            Class.forName(mysJDBCDriver).newInstance();
+            java.util.Properties mysys = System.getProperties();
+            mysys.put("user", userID);
+            mysys.put("password", password1);
+            myConnection = DriverManager.getConnection(url, mysys);
+            Statement myStatement = myConnection.createStatement();
+            ResultSet resultSet = myStatement.executeQuery("select * from Stock where StockType='" + stockType + "';");
+            while(resultSet.next()) {
+                Stock myStock = new Stock();
+                myStock.setName(resultSet.getString("StockName"));
+                myStock.setSymbol(resultSet.getString("StockSymbol"));
+                myStock.setType(resultSet.getString("StockType"));
+                myStock.setPrice(resultSet.getDouble("PricePerShare"));
+                myStock.setNumShares(resultSet.getInt("NumberShares"));
+                stocks.add(myStock);
+            }
+            try {
+                myConnection.close();
+            } catch (Exception e) {
+                System.out.print(e);
+            }
+        }
+        catch (Exception e) {
+            System.out.print(e);
+        }
+        return stocks;
     }
 }

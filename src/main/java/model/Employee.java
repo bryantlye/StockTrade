@@ -39,8 +39,8 @@ public class Employee extends Person {
 		this.level = level;
 	}
 
-	private String employeeID;
-	private String startDate;
+	private String employeeID=null;
+	private String startDate=null;
 	private float hourlyRate;
 	private String level;
 

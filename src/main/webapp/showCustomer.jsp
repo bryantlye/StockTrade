@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ include file="header.jsp" %>
+
+
+
 <div class="container-fluid">
     <h2>${heading}</h2>
     <c:if test="${empty customers}">
@@ -59,7 +63,7 @@
                     <td>
                         <form method="POST" action="deleteCustomer">
                             <div class="form-group">
-                                <input type="hidden" class="form-control" name="customerId" value=${cd.id}>
+                                <input type="hidden" class="form-control" param name="customerId" value=${cd.id}>
                             </div>
                             <input type="submit" value="Delete" class="btn btn-success"/>
                         </form>

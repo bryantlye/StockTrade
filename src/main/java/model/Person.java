@@ -2,7 +2,7 @@ package model;
 
 public class Person {
     private String firstName;
-    private String id;
+    private String id=null;
 	private String lastName;
 	private String email;
 	private String ssn;
