@@ -38,3 +38,12 @@ VALUES ('IBM', 'IBM', 'computer', 91.41, 500);
 INSERT INTO Stock (StockSymbol, StockName, StockType, PricePerShare, NumberShares)
 VALUES ('F', 'Ford', 'automotive', 9.0, 750);
 
+#price history
+INSERT INTO pricehistory (StockSymbol, PricePerShare, DateTime)
+VALUES ('F', 9,'2018-11-02 00:00:00');
+
+INSERT INTO pricehistory (StockSymbol, PricePerShare, DateTime)
+VALUES ('GM', 34.23,'2018-11-02 00:00:00');
+
+INSERT INTO pricehistory (StockSymbol, PricePerShare, DateTime)
+VALUES ('IBM', 91.41,'2018-11-02 00:00:00');

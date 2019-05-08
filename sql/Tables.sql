@@ -110,4 +110,10 @@ CREATE TABLE MarketClose(
     type CHAR(10)
 ); 
 
+CREATE TABLE PriceHistory (
+	StockSymbol CHAR(20) NOT NULL,
+	PricePerShare DOUBLE,
+    DateTime DATETIME,
+	PRIMARY KEY (DATETIME, StockSymbol)
+);
 

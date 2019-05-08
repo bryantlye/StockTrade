@@ -64,7 +64,46 @@ public class CustomerDao {
 		 * The customer record is required to be encapsulated as a "Customer" class object
 		 */
 
-		return null;
+		Customer customer = new Customer();
+		java.sql.Connection myConnection = null;
+		try {
+			String mysJDBCDriver = "com.mysql.jdbc.Driver";
+			String url = "jdbc:mysql://localhost:3306/new_schema";
+			String userID = "root";
+			String password1 = "root";
+			Class.forName(mysJDBCDriver).newInstance();
+			java.util.Properties mysys = System.getProperties();
+			mysys.put("user", userID);
+			mysys.put("password", password1);
+			myConnection = DriverManager.getConnection(url, mysys);
+			Statement myStatement= myConnection.createStatement();
+			//int customer1 = Integer.parseInt(customerID);
+			ResultSet resultSet = myStatement.executeQuery("SELECT C.*, SUM(O.NumShares * O.PricePerShare) AS Revenue FROM Trade T, Customer C, Orderr O WHERE (T.BrokerId IS null AND C.Id = T.AccountId AND T.OrderId = O.Id) GROUP BY C.Id ORDER BY Revenue DESC LIMIT 1;");
+
+			while(resultSet.next()) {
+				Location location = new Location();
+				location.setZipCode(Integer.parseInt(resultSet.getString("ZipCode")));
+				location.setState(resultSet.getString("State"));
+				location.setCity(resultSet.getString("City"));
+				customer.setLocation(location);
+				customer.setLastName(resultSet.getString("LastName"));
+				customer.setFirstName(resultSet.getString("FirstName"));
+				customer.setAddress(resultSet.getString("Address").replace(" ","_"));
+				customer.setTelephone(resultSet.getString("Telephone"));
+				customer.setEmail(resultSet.getString("Email"));
+				customer.setRating(resultSet.getInt("Rating"));
+				customer.setCreditCard(resultSet.getString("CreditCardNumber"));
+				customer.setId(Integer.toString(resultSet.getInt("Id")));
+			}
+			try {
+				myConnection.close();
+			} catch (Exception e) {
+				System.out.print(e);
+			}
+		} catch (Exception e) {
+			System.out.print(e);
+		}
+		return customer;
 	}
 
 	public Customer getCustomer(String customerID) {

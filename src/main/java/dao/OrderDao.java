@@ -58,7 +58,7 @@ public class OrderDao {
             preparedStmt.setInt(1, order.getNumShares());
             preparedStmt.setDouble (2, stock.getPrice());
             preparedStmt.setInt (3, orderid);
-            preparedStmt.setDate (4, new java.sql.Date(new java.util.Date().getTime()));
+            preparedStmt.setTimestamp (4, new java.sql.Timestamp(new java.util.Date().getTime()));
             preparedStmt.setString (5, type);
             preparedStmt.executeUpdate();
 
@@ -109,6 +109,17 @@ public class OrderDao {
             preparedStmt.executeUpdate();
             orderid++;
 
+
+            String stockSymbol = stock.getSymbol();
+            int numShares = order.getNumShares();
+
+            String query1 = "UPDATE Stock SET NumberShares = NumberShares - '"+numShares+"' WHERE StockSymbol = '"+stockSymbol+"'";
+            PreparedStatement preparedStmt1 = myConnection.prepareStatement(query1);
+            //preparedStmt.setDouble (1, stockPrice);
+            //preparedStmt.setString (2, stockSymbol);
+            preparedStmt1.executeUpdate();
+
+
             try {
                 myConnection.close();
             } catch (Exception e) {
@@ -145,7 +156,7 @@ public class OrderDao {
                         MarketOrder order = new MarketOrder();
                         order.setBuySellType(resultSet2.getString("type"));
                         order.setId(Integer.parseInt(resultSet.getString("OrderId")));
-                        order.setDatetime(resultSet.getDate("DateTime"));
+                        order.setDatetime(resultSet.getTimestamp("DateTime"));
                         order.setNumShares((int) resultSet.getDouble("PricePerShare"));
                         orders.add(order);
                     }
@@ -156,7 +167,7 @@ public class OrderDao {
                         MarketOnCloseOrder order = new MarketOnCloseOrder();
                         order.setBuySellType(resultSet2.getString("type"));
                         order.setId(Integer.parseInt(resultSet.getString("OrderId")));
-                        order.setDatetime(resultSet.getDate("DateTime"));
+                        order.setDatetime(resultSet.getTimestamp("DateTime"));
                         order.setNumShares((int) resultSet.getDouble("PricePerShare"));
                         orders.add(order);
                     }
@@ -167,7 +178,7 @@ public class OrderDao {
                         TrailingStopOrder order = new TrailingStopOrder();
                         order.setPercentage(resultSet2.getDouble("Percentage"));
                         order.setId(Integer.parseInt(resultSet.getString("OrderId")));
-                        order.setDatetime(resultSet.getDate("DateTime"));
+                        order.setDatetime(resultSet.getTimestamp("DateTime"));
                         order.setNumShares((int) resultSet.getDouble("PricePerShare"));
                         orders.add(order);
                     }
@@ -178,7 +189,7 @@ public class OrderDao {
                         HiddenStopOrder order = new HiddenStopOrder();
                         order.setPricePerShare(resultSet2.getDouble("price"));
                         order.setId(Integer.parseInt(resultSet.getString("OrderId")));
-                        order.setDatetime(resultSet.getDate("DateTime"));
+                        order.setDatetime(resultSet.getTimestamp("DateTime"));
                         order.setNumShares((int) resultSet.getDouble("PricePerShare"));
                         orders.add(order);
                     }
@@ -214,7 +225,7 @@ public class OrderDao {
                         MarketOrder order = new MarketOrder();
                         order.setBuySellType(resultSet2.getString("type"));
                         order.setId(Integer.parseInt(resultSet.getString("OrderId")));
-                        order.setDatetime(resultSet.getDate("DateTime"));
+                        order.setDatetime(resultSet.getTimestamp("DateTime"));
                         order.setNumShares((int) resultSet.getDouble("PricePerShare"));
                         orders.add(order);
                     }
@@ -225,7 +236,7 @@ public class OrderDao {
                         MarketOnCloseOrder order = new MarketOnCloseOrder();
                         order.setBuySellType(resultSet2.getString("type"));
                         order.setId(Integer.parseInt(resultSet.getString("OrderId")));
-                        order.setDatetime(resultSet.getDate("DateTime"));
+                        order.setDatetime(resultSet.getTimestamp("DateTime"));
                         order.setNumShares((int) resultSet.getDouble("PricePerShare"));
                         orders.add(order);
                     }
@@ -236,7 +247,7 @@ public class OrderDao {
                         TrailingStopOrder order = new TrailingStopOrder();
                         order.setPercentage(resultSet2.getDouble("Percentage"));
                         order.setId(Integer.parseInt(resultSet.getString("OrderId")));
-                        order.setDatetime(resultSet.getDate("DateTime"));
+                        order.setDatetime(resultSet.getTimestamp("DateTime"));
                         order.setNumShares((int) resultSet.getDouble("PricePerShare"));
                         orders.add(order);
                     }
@@ -247,7 +258,7 @@ public class OrderDao {
                         HiddenStopOrder order = new HiddenStopOrder();
                         order.setPricePerShare(resultSet2.getDouble("price"));
                         order.setId(Integer.parseInt(resultSet.getString("OrderId")));
-                        order.setDatetime(resultSet.getDate("DateTime"));
+                        order.setDatetime(resultSet.getTimestamp("DateTime"));
                         order.setNumShares((int) resultSet.getDouble("PricePerShare"));
                         orders.add(order);
                     }
@@ -283,8 +294,8 @@ public class OrderDao {
                         MarketOrder order = new MarketOrder();
                         order.setBuySellType(resultSet2.getString("type"));
                         order.setId(Integer.parseInt(resultSet.getString("OrderId")));
-                        order.setDatetime(resultSet.getDate("DateTime"));
-                        order.setNumShares((int) resultSet.getDouble("PricePerShare"));
+                        order.setDatetime(resultSet.getTimestamp("DateTime"));
+                        order.setNumShares((int) resultSet.getDouble("NumShares"));
                         orders.add(order);
                     }
                 }
@@ -294,8 +305,8 @@ public class OrderDao {
                         MarketOnCloseOrder order = new MarketOnCloseOrder();
                         order.setBuySellType(resultSet2.getString("type"));
                         order.setId(Integer.parseInt(resultSet.getString("OrderId")));
-                        order.setDatetime(resultSet.getDate("DateTime"));
-                        order.setNumShares((int) resultSet.getDouble("PricePerShare"));
+                        order.setDatetime(resultSet.getTimestamp("DateTime"));
+                        order.setNumShares((int) resultSet.getDouble("NumShares"));
                         orders.add(order);
                     }
                 }
@@ -305,8 +316,8 @@ public class OrderDao {
                         TrailingStopOrder order = new TrailingStopOrder();
                         order.setPercentage(resultSet2.getDouble("Percentage"));
                         order.setId(Integer.parseInt(resultSet.getString("OrderId")));
-                        order.setDatetime(resultSet.getDate("DateTime"));
-                        order.setNumShares((int) resultSet.getDouble("PricePerShare"));
+                        order.setDatetime(resultSet.getTimestamp("DateTime"));
+                        order.setNumShares((int) resultSet.getDouble("NumShares"));
                         orders.add(order);
                     }
                 }
@@ -316,8 +327,8 @@ public class OrderDao {
                         HiddenStopOrder order = new HiddenStopOrder();
                         order.setPricePerShare(resultSet2.getDouble("price"));
                         order.setId(Integer.parseInt(resultSet.getString("OrderId")));
-                        order.setDatetime(resultSet.getDate("DateTime"));
-                        order.setNumShares((int) resultSet.getDouble("PricePerShare"));
+                        order.setDatetime(resultSet.getTimestamp("DateTime"));
+                        order.setNumShares((int) resultSet.getDouble("NumShares"));
                         orders.add(order);
                     }
                 }

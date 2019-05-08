@@ -214,8 +214,45 @@ public class EmployeeDao {
 	}
 	
 	public Employee getHighestRevenueEmployee() {
-
-		return null;
+		Employee employee = new Employee();
+		java.sql.Connection myConnection = null;
+		try {
+			String mysJDBCDriver = "com.mysql.jdbc.Driver";
+			String url = "jdbc:mysql://localhost:3306/new_schema";
+			String userID = "root";
+			String password1 = "root";
+			Class.forName(mysJDBCDriver).newInstance();
+			java.util.Properties mysys = System.getProperties();
+			mysys.put("user", userID);
+			mysys.put("password", password1);
+			myConnection = DriverManager.getConnection(url, mysys);
+			Statement myStatement= myConnection.createStatement();
+			ResultSet resultSet = myStatement.executeQuery("SELECT E.*, SUM(O.NumShares * O.PricePerShare) AS Revenue FROM Trade T, Employee E, Orderr O WHERE (T.BrokerId IS NOT null AND E.Id = T.BrokerId AND T.OrderId = O.Id) GROUP BY E.Id ORDER BY Revenue DESC LIMIT 1;");
+			while(resultSet.next()) {
+				Location location = new Location();
+				location.setZipCode(Integer.parseInt(resultSet.getString("ZipCode")));
+				location.setState(resultSet.getString("State"));
+				location.setCity(resultSet.getString("City"));
+				employee.setLocation(location);
+				employee.setLastName(resultSet.getString("LastName"));
+				employee.setFirstName(resultSet.getString("FirstName"));
+				employee.setAddress(resultSet.getString("Address").replace(" ","_"));
+				employee.setTelephone(resultSet.getString("Telephone"));
+				employee.setEmail(resultSet.getString("Email"));
+				employee.setStartDate(resultSet.getString("StartDate"));
+				employee.setHourlyRate(Float.parseFloat(resultSet.getString("HourlyRate")));
+				employee.setId(Integer.toString(resultSet.getInt("Id")));
+				employee.setSsn(Integer.toString(resultSet.getInt("Id")));
+			}
+			try {
+				myConnection.close();
+			} catch (Exception e) {
+				System.out.print(e);
+			}
+		} catch (Exception e) {
+			System.out.print(e);
+		}
+		return employee;
 	}
 
 	public String getEmployeeID(String username) {
