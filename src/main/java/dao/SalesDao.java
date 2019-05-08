@@ -167,9 +167,6 @@ public class SalesDao {
                     sales.add(item);
                 }
             }
-            else {
-                sales.clear();
-            }
             try {
                 myConnection.close();
             } catch (SQLException e) {

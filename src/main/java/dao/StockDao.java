@@ -187,7 +187,7 @@ public class StockDao {
             mysys.put("password", password1);
             myConnection = DriverManager.getConnection(url, mysys);
             Statement myStatement = myConnection.createStatement();
-            ResultSet resultSet = myStatement.executeQuery("SELECT S.*, SUM(O.NumShares * O.PricePerShare) AS Revenue FROM Stock S, Orderr O WHERE (S.PricePerShare = O.PricePerShare) GROUP BY S.StockSymbol ORDER BY Revenue DESC;");
+            ResultSet resultSet = myStatement.executeQuery("SELECT S.*, SUM(O.NumShares) AS NumShares FROM Stock S, Orderr O, Trade T WHERE S.PricePerShare = O.PricePerShare AND T.OrderId = O.Id GROUP BY S.StockSymbol ORDER BY NumShares DESC;");
             while (resultSet.next()) {
                 Stock myStock = new Stock();
                 myStock.setName(resultSet.getString("StockName"));
@@ -228,7 +228,7 @@ public class StockDao {
             mysys.put("password", password1);
             myConnection = DriverManager.getConnection(url, mysys);
             Statement myStatement = myConnection.createStatement();
-            ResultSet resultSet = myStatement.executeQuery("SELECT S.*, SUM(O.NumShares * O.PricePerShare) AS Revenue FROM Stock S, Orderr O, Trade T WHERE S.PricePerShare = O.PricePerShare AND T.OrderId = O.Id AND T.BrokerId IS NULL GROUP BY S.StockSymbol ORDER BY Revenue DESC;");
+            ResultSet resultSet = myStatement.executeQuery("SELECT S.*, SUM(O.NumShares) AS NumShares FROM Stock S, Orderr O, Trade T WHERE S.PricePerShare = O.PricePerShare AND T.OrderId = O.Id AND T.BrokerId IS NULL GROUP BY S.StockSymbol ORDER BY NumShares DESC;");
             while (resultSet.next()) {
                 Stock myStock = new Stock();
                 myStock.setName(resultSet.getString("StockName"));
@@ -301,12 +301,12 @@ public class StockDao {
             mysys.put("password", password1);
             myConnection = DriverManager.getConnection(url, mysys);
             Statement myStatement = myConnection.createStatement();
-            ResultSet resultSet = myStatement.executeQuery("select * from trade T, stock S where T.StockId = S.StockName and T.AccountId='" + customerId +"'GROUP BY T.StockId");
+            ResultSet resultSet = myStatement.executeQuery("select S.*, T.*, SUM(O.NumShares) AS NumShares FROM Trade T, Stock S, Orderr O where T.StockId = S.StockName AND T.OrderId = O.Id AND T.AccountId= '"+customerId+"' GROUP BY T.StockId");
             while(resultSet.next()){
                 Stock stock = new Stock();
                 stock.setName(resultSet.getString("StockName"));
                 stock.setSymbol(resultSet.getString("StockSymbol"));
-                stock.setPrice(resultSet.getDouble("PricePerShare"));
+                stock.setNumShares(resultSet.getInt("NumShares"));
                 stock.setType(resultSet.getString("StockType"));
                 stocks.add(stock);
             }

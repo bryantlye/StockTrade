@@ -15,7 +15,7 @@ import java.util.List;
 
 public class OrderDao {
 
-    static int orderid = 15;
+    static int orderid = 0;
 
     public List<OrderPriceEntry> getOrderPriceHistory(String orderId) {
 
@@ -53,6 +53,26 @@ public class OrderDao {
             mysys.put("user", userID);
             mysys.put("password", password1);
             myConnection = DriverManager.getConnection(url, mysys);
+
+            Statement myStatement= myConnection.createStatement();
+            ResultSet resultSet = myStatement.executeQuery("select MAX(O.Id) as OrderId from orderr O;");
+
+            //make sure order id is correct
+            while(resultSet.next()) {
+                orderid = resultSet.getInt("OrderId");
+            }
+            orderid++;
+
+            //necessary for updating stock inventory
+            String stockSymbol = stock.getSymbol();
+            int numShares = order.getNumShares();
+            //first see if buying that number of stocks would be more than available.
+            String query1 = "UPDATE Stock SET NumberShares = NumberShares - '"+numShares+"' WHERE StockSymbol = '"+stockSymbol+"'";
+            PreparedStatement preparedStmt1 = myConnection.prepareStatement(query1);
+            preparedStmt1.executeUpdate();
+
+
+            //then create the order
             String query = " insert into Orderr values (?, ?, ?, ?, ?)";
             PreparedStatement preparedStmt = myConnection.prepareStatement(query);
             preparedStmt.setInt(1, order.getNumShares());
@@ -108,16 +128,6 @@ public class OrderDao {
             preparedStmt.setString(4,stock.getName());
             preparedStmt.executeUpdate();
             orderid++;
-
-
-            String stockSymbol = stock.getSymbol();
-            int numShares = order.getNumShares();
-
-            String query1 = "UPDATE Stock SET NumberShares = NumberShares - '"+numShares+"' WHERE StockSymbol = '"+stockSymbol+"'";
-            PreparedStatement preparedStmt1 = myConnection.prepareStatement(query1);
-            //preparedStmt.setDouble (1, stockPrice);
-            //preparedStmt.setString (2, stockSymbol);
-            preparedStmt1.executeUpdate();
 
 
             try {
@@ -226,7 +236,7 @@ public class OrderDao {
                         order.setBuySellType(resultSet2.getString("type"));
                         order.setId(Integer.parseInt(resultSet.getString("OrderId")));
                         order.setDatetime(resultSet.getTimestamp("DateTime"));
-                        order.setNumShares((int) resultSet.getDouble("PricePerShare"));
+                        order.setNumShares((int) resultSet.getDouble("NumShares"));
                         orders.add(order);
                     }
                 }

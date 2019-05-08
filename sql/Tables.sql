@@ -56,8 +56,21 @@ CREATE TABLE Stock (
 	StockType CHAR(20) NOT NULL,
 	PricePerShare DOUBLE,
     NumberShares INTEGER,
-	PRIMARY KEY (StockSymbol) 
+	PRIMARY KEY (StockSymbol),
+    CHECK (PricePerShare > 0),
+    CHECK (NumberShares > 0)
 );
+
+DELIMITER $$
+CREATE TRIGGER `before_update_stock` BEFORE UPDATE ON `Stock`
+FOR EACH ROW
+BEGIN
+    IF NEW.NumberShares < 0 THEN
+        SIGNAL SQLSTATE '99999'
+            SET MESSAGE_TEXT = 'check constraint on Stock.NumberShares failed';
+    END IF;
+END$$   
+DELIMITER ;
 	
 CREATE TABLE HasStock(
 	clientId INTEGER,
@@ -79,7 +92,8 @@ CREATE TABLE Orderr (
 	DateTime DATETIME,
 	PriceType CHAR(20),
 	PRIMARY KEY (Id),
-    CHECK(PriceType IN(‘Market’, ‘MarketOnClose’, ‘TrailingStop’, ‘HiddenStop’))
+    CHECK(PriceType IN(‘Market’, ‘MarketOnClose’, ‘TrailingStop’, ‘HiddenStop’)),
+    CHECK (NumShares > 0)
 );
 
 CREATE TABLE Trade (
