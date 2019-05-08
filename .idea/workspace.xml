@@ -6,17 +6,9 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="87b26d3f-5298-401b-af00-6b486b3981cd" name="Default Changelist" comment="\sql - added price history table + default data&#10;&#10;CustomerDao - implemented getHighestRevenueCustomer&#10;EmployeeDao - implemented getHighestRevenueEmployee&#10;OrderDao - replaced setDate and getDate since they only get the date. setTimeStamp and getTimeStamp includes time&#10;         - fixed getOrderHistory: numShares was displaying price per share&#10;SalesDao - implemented getSalesReport&#10;         - implemented getSummaryListing&#10;StockDao - added to setStockPrice so that it adds to PriceHistory&#10;         - implemented getOverallBestsellers&#10;         - implemented getCustomerBestsellers&#10;         - implemented getStockPriceHistory&#10;\src\main\webapp\viewSalesReport.jsp - fixed date range to include 2019 (went up to 2018 before)">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="87b26d3f-5298-401b-af00-6b486b3981cd" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/artifacts/Jsp_war2.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql/Data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/sql/Data.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sql/Tables.sql" beforeDir="false" afterPath="$PROJECT_DIR$/sql/Tables.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dao/CustomerDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/CustomerDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dao/EmployeeDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/EmployeeDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dao/OrderDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/OrderDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dao/SalesDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/SalesDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/dao/StockDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/dao/StockDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/viewSalesReport.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/viewSalesReport.jsp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -75,7 +67,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/model/RevenueItem.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="43">
-              <caret line="14" column="5" lean-forward="true" selection-start-line="14" selection-start-column="5" selection-end-line="14" selection-end-column="5" />
+              <caret line="14" column="5" selection-start-line="14" selection-start-column="5" selection-end-line="14" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -84,7 +76,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/dao/StockDao.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="106">
-              <caret line="128" column="52" lean-forward="true" selection-start-line="128" selection-start-column="52" selection-end-line="128" selection-end-column="52" />
+              <caret line="128" column="52" selection-start-line="128" selection-start-column="52" selection-end-line="128" selection-end-column="52" />
             </state>
           </provider>
         </entry>
@@ -93,7 +85,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/dao/OrderDao.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="136">
-              <caret line="19" column="71" lean-forward="true" selection-start-line="19" selection-start-column="71" selection-end-line="19" selection-end-column="71" />
+              <caret line="19" column="71" selection-start-line="19" selection-start-column="71" selection-end-line="19" selection-end-column="71" />
             </state>
           </provider>
         </entry>
@@ -101,8 +93,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/resources/AddOrderController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="149">
-              <caret line="76" column="42" lean-forward="true" selection-start-line="76" selection-start-column="42" selection-end-line="76" selection-end-column="42" />
+            <state relative-caret-position="319">
+              <caret line="86" column="60" selection-start-line="86" selection-start-column="60" selection-end-line="86" selection-end-column="60" />
             </state>
           </provider>
         </entry>
@@ -230,6 +222,7 @@
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -327,15 +320,24 @@
       <option name="presentableId" value="Default" />
       <updated>1555451404078</updated>
       <workItem from="1555451406900" duration="2112000" />
-      <workItem from="1557162659182" duration="25317000" />
+      <workItem from="1557162659182" duration="26324000" />
     </task>
+    <task id="LOCAL-00001" summary="\sql - added price history table + default data&#10;&#10;CustomerDao - implemented getHighestRevenueCustomer&#10;EmployeeDao - implemented getHighestRevenueEmployee&#10;OrderDao - replaced setDate and getDate since they only get the date. setTimeStamp and getTimeStamp includes time&#10;         - fixed getOrderHistory: numShares was displaying price per share&#10;SalesDao - implemented getSalesReport&#10;         - implemented getSummaryListing&#10;StockDao - added to setStockPrice so that it adds to PriceHistory&#10;         - implemented getOverallBestsellers&#10;         - implemented getCustomerBestsellers&#10;         - implemented getStockPriceHistory&#10;\src\main\webapp\viewSalesReport.jsp - fixed date range to include 2019 (went up to 2018 before)">
+      <created>1557284631206</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1557284631206</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="27429000" />
+    <option name="totallyTimeSpent" value="28436000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="-6" width="1549" height="837" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1750503" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -347,7 +349,7 @@
       <window_info id="Web" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32956153" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3281471" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3281471" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.10891089" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -356,10 +358,10 @@
       <window_info anchor="bottom" id="Terminal" order="8" />
       <window_info anchor="bottom" id="Docker" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Messages" order="11" visible="true" weight="0.3281471" />
+      <window_info anchor="bottom" id="Messages" order="11" weight="0.3281471" />
       <window_info anchor="bottom" id="Java Enterprise" order="12" />
       <window_info anchor="bottom" id="Database Changes" order="13" />
-      <window_info anchor="bottom" id="Version Control" order="14" />
+      <window_info anchor="bottom" id="Version Control" order="14" weight="0.32956153" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -726,7 +728,7 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/model/RevenueItem.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="43">
-          <caret line="14" column="5" lean-forward="true" selection-start-line="14" selection-start-column="5" selection-end-line="14" selection-end-column="5" />
+          <caret line="14" column="5" selection-start-line="14" selection-start-column="5" selection-end-line="14" selection-end-column="5" />
         </state>
       </provider>
     </entry>
@@ -751,21 +753,21 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/dao/StockDao.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="106">
-          <caret line="128" column="52" lean-forward="true" selection-start-line="128" selection-start-column="52" selection-end-line="128" selection-end-column="52" />
+          <caret line="128" column="52" selection-start-line="128" selection-start-column="52" selection-end-line="128" selection-end-column="52" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/dao/OrderDao.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
-          <caret line="19" column="71" lean-forward="true" selection-start-line="19" selection-start-column="71" selection-end-line="19" selection-end-column="71" />
+          <caret line="19" column="71" selection-start-line="19" selection-start-column="71" selection-end-line="19" selection-end-column="71" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/resources/AddOrderController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="149">
-          <caret line="76" column="42" lean-forward="true" selection-start-line="76" selection-start-column="42" selection-end-line="76" selection-end-column="42" />
+        <state relative-caret-position="319">
+          <caret line="86" column="60" selection-start-line="86" selection-start-column="60" selection-end-line="86" selection-end-column="60" />
         </state>
       </provider>
     </entry>
@@ -775,7 +777,7 @@
       <state key="ArtifactsStructureConfigurable.UI">
         <settings>
           <artifact-editor />
-          <last-edited>Jsp:war exploded</last-edited>
+          <last-edited>Jsp:war</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -788,6 +790,7 @@
       </state>
       <state key="FacetStructureConfigurable.UI">
         <settings>
+          <last-edited>Web</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -826,7 +829,6 @@
             <option name="proportions">
               <list>
                 <option value="0.2" />
-                <option value="0.6" />
               </list>
             </option>
           </splitter-proportions>
